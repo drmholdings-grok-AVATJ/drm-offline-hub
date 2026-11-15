@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DRM Offline Agent Hub · STX</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <span class="logo">DRM</span>
+    <div><div class="title">Offline Agent Hub</div><div class="sub">St. Croix · local only · Jett is the only gate</div></div>
+  </div>
+  <div class="status">
+    <span id="llmStatus" class="pill pill-wait" title="Local AI status">Checking Ollama…</span>
+    <span id="padStatus" class="pill pill-off" title="Haptic device">No controller</span>
+    <button id="btnSettings" class="ghost">⚙ Settings</button>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs" role="tablist"></nav>
+
+<main>
+  <!-- Chat view -->
+  <section id="chatView" class="view">
+    <aside class="agentCard" id="agentCard"></aside>
+    <div class="chatCol">
+      <div id="messages" class="messages" aria-live="polite"></div>
+      <form id="chatForm" class="composer">
+        <textarea id="chatInput" rows="2" placeholder="Talk to your agent… (Enter to send, Shift+Enter for new line)"></textarea>
+        <div class="composerBtns">
+          <button type="submit" id="btnSend" class="primary">Send</button>
+          <button type="button" id="btnStop" class="ghost" hidden>Stop</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Adopt view -->
+  <section id="adoptView" class="view" hidden>
+    <h2 id="adoptTitle">Adopt an agent</h2>
+    <form id="adoptForm" class="adopt">
+      <input type="hidden" id="fId">
+      <label>Name <input id="fName" required maxlength="40" placeholder="e.g. Kandy"></label>
+      <label>Role <input id="fRole" required maxlength="60" placeholder="e.g. Booking agent"></label>
+      <label>Agency <input id="fAgency" maxlength="60" placeholder="e.g. DRM House"></label>
+      <label>Accent color <input id="fColor" type="color" value="#40e0d0"></label>
+      <label class="wide">System prompt (who this agent is)
+        <textarea id="fPrompt" rows="5" required placeholder="You are … Keep it short. Jett is the only gate."></textarea></label>
+      <label class="wide">Greeting <input id="fGreeting" maxlength="160" placeholder="First line the agent says"></label>
+      <div class="wide">
+        <div class="lbl">Avatar <small>(pick one or upload — uploads stay on this laptop)</small></div>
+        <div id="avatarGrid" class="avatarGrid"></div>
+        <label class="upload">⬆ Upload image <input id="fUpload" type="file" accept="image/*"></label>
+      </div>
+      <div class="wide">
+        <div class="lbl">Haptic pattern <small>(vibrate ms, pause ms, vibrate ms …)</small></div>
+        <div class="hapticRow">
+          <select id="fHapticPreset"></select>
+          <input id="fHaptic" placeholder="60,80,60" pattern="[0-9 ,]+">
+          <button type="button" id="btnTestHapticForm" class="ghost">▶ Test</button>
+        </div>
+      </div>
+      <div class="wide actions">
+        <button type="submit" class="primary" id="btnSaveAgent">Adopt agent</button>
+        <button type="button" class="ghost" id="btnCancelAdopt">Cancel</button>
+        <button type="button" class="danger" id="btnDeleteAgent" hidden>Release agent</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Settings view -->
+  <section id="settingsView" class="view" hidden>
+    <h2>Settings</h2>
+    <div class="adopt">
+      <label>Ollama URL <input id="sUrl" value="http://localhost:11434"></label>
+      <label>Model <input id="sModel" list="modelList" value="llama3.2:3b"><datalist id="modelList"></datalist></label>
+      <label>History sent to model (messages) <input id="sCtx" type="number" min="2" max="60" value="16"></label>
+      <label>Haptic strength <input id="sStrength" type="range" min="0.1" max="1" step="0.1" value="0.8"></label>
+      <label class="check"><input id="sHaptics" type="checkbox" checked> Vibrate on each reply</label>
+      <div class="wide actions">
+        <button class="primary" id="btnSaveSettings">Save</button>
+        <button class="ghost" id="btnRecheck">Re-check Ollama</button>
+        <button class="ghost" id="btnTestHaptic">▶ Test haptics</button>
+      </div>
+      <div class="wide actions">
+        <button class="ghost" id="btnExport">⬇ Export hub (JSON)</button>
+        <label class="upload">⬆ Import hub JSON <input id="fImport" type="file" accept="application/json,.json"></label>
+        <button class="danger" id="btnReset">Reset to starter agents</button>
+      </div>
+      <p class="wide note">Everything is stored in this browser on this laptop (localStorage). Export makes a backup file you can copy to a USB stick. Nothing is sent to the internet.</p>
+    </div>
+  </section>
+</main>
+
+<script src="profiles.js"></script>
+<script src="haptics.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
